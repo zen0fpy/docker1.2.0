@@ -31,7 +31,7 @@ type Image struct {
 	DockerVersion   string            `json:"docker_version,omitempty"`
 	Author          string            `json:"author,omitempty"`
 	Config          *runconfig.Config `json:"config,omitempty"`
-	Architecture    string            `json:"architecture,omitempty"`
+	Architecture    string            `json:"architecture,omitempty"` // 体系架构, 如，AMD64
 	OS              string            `json:"os,omitempty"`
 	Size            int64
 
@@ -40,6 +40,7 @@ type Image struct {
 
 func LoadImage(root string) (*Image, error) {
 	// Load the json data
+	// 镜像配置以json格式存储
 	jsonData, err := ioutil.ReadFile(jsonPath(root))
 	if err != nil {
 		return nil, err
@@ -53,6 +54,7 @@ func LoadImage(root string) (*Image, error) {
 		return nil, err
 	}
 
+	// 读取/var/lib/docker目录下文件
 	if buf, err := ioutil.ReadFile(path.Join(root, "layersize")); err != nil {
 		if !os.IsNotExist(err) {
 			return nil, err
